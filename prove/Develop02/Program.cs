@@ -1,4 +1,5 @@
 using System;
+using System.IO; 
 
 class Program
 {
@@ -38,14 +39,46 @@ class Program
                     break;
 
                 case 3:
-                    Console.WriteLine("You chose to Load.");
-                    // Add your Load logic here
+                    Console.WriteLine("What is the name of the file? ");
+                    string _Loadfilename =  Console.ReadLine();
+                    string[] lines = System.IO.File.ReadAllLines(_Loadfilename);
+
+
+                    foreach (string line in lines)
+                    {
+                        Page page = new Page();
+                        string[] parts = line.Split(",");
+
+                        page._date = parts[0];
+                        page._question = parts[1];
+                        page._answer = parts[2];
+
+                        myNotebook._pages.Add(page);
+                    
+                    }
+
                     break;
 
                 case 4:
-                    Console.WriteLine("You chose to Save.");
-                    // Add your Save logic here
-                    break;
+
+                    try{
+
+                        Console.WriteLine("What is the filename? ");
+                        string _filename = Console.ReadLine();
+                        using (StreamWriter outputFile = new StreamWriter(filename_path))
+                        
+                        foreach (Page page in myNotebook._pages){
+                            outputFile.WriteLine($"{page._date},{page._question},{page._answer}");
+                        }
+
+                        Console.WriteLine($"File {_filename} created successfully.");
+                        
+
+                    } catch (Exception ex) {
+                        Console.WriteLine($"Error creating the file: {ex.Message}");
+                    }
+                    
+                   break;
 
                 case 5:
                     Console.WriteLine("Quitting the program.");
