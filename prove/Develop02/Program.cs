@@ -65,7 +65,7 @@ class Program
 
                         Console.WriteLine("What is the filename? ");
                         string _filename = Console.ReadLine();
-                        using (StreamWriter outputFile = new StreamWriter(filename_path))
+                        using (StreamWriter outputFile = new StreamWriter(_filename))
                         
                         foreach (Page page in myNotebook._pages){
                             outputFile.WriteLine($"{page._date},{page._question},{page._answer}");
