@@ -4,6 +4,20 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello Develop03 World!");
+        string verse = "Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths.";
+        Reference reference = new Reference("Proverbs",3,5,6);
+        Scripture scripture = new Scripture(reference,verse);
+        string response = "";
+
+        do {
+
+            Console.Clear();
+            Console.WriteLine(scripture.getDisplayText());
+            Console.WriteLine(" ");
+            Console.WriteLine("Press enter to continue or type 'quit' to finish: ");
+            response = Console.ReadLine();
+
+        }while(response != "quit");
+       
     }
 }
