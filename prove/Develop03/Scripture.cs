@@ -7,6 +7,8 @@ public class Scripture{
 
     private int sizeOfAllHiddenWords = 0;
 
+    private int sizeOfAllWords = 0;
+
     public Scripture(Reference reference, string text){
         this.reference = reference;
         String[] verseWords = text.Split(" ");
@@ -15,29 +17,55 @@ public class Scripture{
             words.Add(word);
         } 
 
+        sizeOfAllWords = words.Count;
+        
+
     }
 
     public void hideRandomWords(int numbersToHide){
         Random random = new Random();
         int randomIndex = 0;
+        
 
-        for (int i = 0; i<3; i++){
+        if (numbersToHide <= (sizeOfAllWords - sizeOfAllHiddenWords)){
 
-            do{
-                Console.WriteLine($"{sizeOfAllHiddenWords} == {words.Count-1}");
-                if (sizeOfAllHiddenWords  == (words.Count - 1)){
+            for (int i = 0; i<numbersToHide; i++){
+
+                do{
+                    randomIndex =  random.Next(0, words.Count);
+                
+                }while(words[randomIndex].isHidden());
+
+                sizeOfAllHiddenWords++;
+
+                words[randomIndex].hide();
+
+                if(sizeOfAllHiddenWords == sizeOfAllWords){
+                 _isCompletelyHidden = true;
+                 
+                }
+            }
+        } else {
+            int numbersToHideRemaining = sizeOfAllWords - sizeOfAllHiddenWords;
+
+            for(int  i = 0; i< numbersToHideRemaining;i++ ){
+                do {
+                    randomIndex =  random.Next(0, words.Count);
+                }while(words[randomIndex].isHidden());
+
+                sizeOfAllHiddenWords++;
+
+                words[randomIndex].hide();
+
+                Console.WriteLine($"{sizeOfAllHiddenWords} == {sizeOfAllWords}");
+
+                if(sizeOfAllHiddenWords == sizeOfAllWords){
                     _isCompletelyHidden = true;
-                    break;
                 }
-                randomIndex =  random.Next(0, words.Count);
-                if(words[randomIndex].isHidden()){
-                    
-                }
-            }while( || sizeOfAllHiddenWords  == (words.Count - 1));
-            sizeOfAllHiddenWords++;
-            words[randomIndex].hide();
-        }
+            }
 
+        }
+       
 
     }
 
