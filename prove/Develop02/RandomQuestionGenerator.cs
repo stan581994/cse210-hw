@@ -3,8 +3,9 @@ public class RandomQuestionGenerator{
     public List<string> _randomQuestions = new List<string>();
 
     public RandomQuestionGenerator(){
-        string filename = "D:\\BYU Idaho\\cse210\\prove\\Develop02\\prompt\\randomQuestions.txt";
-        string[] lines = System.IO.File.ReadAllLines(filename);
+        String filename = "..\\..\\..\\prompt\\randomQuestions.txt";
+        string filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename);
+        string[] lines = System.IO.File.ReadAllLines(filePath);
 
         foreach(string line in lines){
             _randomQuestions.Add(line);
