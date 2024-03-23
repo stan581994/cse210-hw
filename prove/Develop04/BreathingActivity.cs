@@ -9,15 +9,6 @@ public class BreathingActivity : Activity
     {
 
         DisplayStartingMessage();
-        BreatheExercise(GetDuration());
-        DisplayEndingMessage();
-
-
-
-    }
-
-    private void BreatheExercise(int sec)
-    {
         int totalDuration = GetDuration();
 
         // Assuming a default number of sets (e.g., 5)
@@ -42,5 +33,10 @@ public class BreathingActivity : Activity
             ShowCountDown(exhaleDuration);
             Console.WriteLine();
         }
+        DisplayEndingMessage();
+
+
+
     }
+
 }
