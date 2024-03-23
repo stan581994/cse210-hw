@@ -5,10 +5,11 @@ class Program
     static void Main(string[] args)
     {
 
-        int response = 0; 
-        string desc="";
+        int response = 0;
+        string desc = "";
 
-        do {
+        do
+        {
             Console.Clear();
             Console.WriteLine("Menu Options: ");
             Console.WriteLine("1. Start Breathing activity");
@@ -18,27 +19,32 @@ class Program
             Console.Write("Select a choice from the menu: ");
             response = int.Parse(Console.ReadLine());
 
-            switch (response){
+            switch (response)
+            {
                 case 1:
                     Console.Clear();
-                    desc="This activity will help you relax by walking your through breathing in and out slowly. Clear your mind and focus on your breathing.";
-                    BreathingActivity breathingActivity = new BreathingActivity("Breathing",desc);
+                    desc = "This activity will help you relax by walking your through breathing in and out slowly. Clear your mind and focus on your breathing.";
+                    BreathingActivity breathingActivity = new BreathingActivity("Breathing", desc);
                     breathingActivity.Run();
                     break;
                 case 2:
                     Console.Clear();
                     desc = "This activity will help you reflect on times in your life when you have shown strength and resilience. This will help you recognize the power you have and how you can use it in other aspects of your life.";
-                    ReflectingActivity reflectingActivity = new ReflectingActivity("Reflecting",desc);
+                    ReflectingActivity reflectingActivity = new ReflectingActivity("Reflecting", desc);
                     reflectingActivity.Run();
                     break;
                 case 3:
+                    Console.Clear();
+                    desc = "This activity will help you reflect on the good things in your life by having you list as many things as you can in a certain area.";
+                    ListingActivity listingActivity = new ListingActivity("Listing", desc);
+                    listingActivity.Run();
                     break;
 
             }
 
 
 
-        }while (response != 4);
+        } while (response != 4);
 
     }
 }
