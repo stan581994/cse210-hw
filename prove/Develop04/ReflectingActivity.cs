@@ -90,7 +90,7 @@ public class ReflectingActivity : Activity
             usedQuestions.Add(displayQuestion);
 
 
-            Console.Write(displayQuestion);
+            Console.Write($"{displayQuestion} ");
             ShowSpinner(questionDuration);
             Console.WriteLine("\n\n");
             remainingTime -= questionDuration;
