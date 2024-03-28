@@ -4,6 +4,7 @@ public abstract class Goal {
     private string _description;
     private string _points;
 
+
     public Goal (string name, string description, string point){
         _shortName = name;
         _description = description;
@@ -38,5 +39,6 @@ public abstract class Goal {
         _points = totalPoints.ToString();
 
     }
+
 
 }

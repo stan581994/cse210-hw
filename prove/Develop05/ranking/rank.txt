@@ -1,0 +1,10 @@
+Initiate,100
+Aspirant,250
+Striver,500
+Achiever,750
+Accomplisher,1000
+Voyager,1500
+Conqueror,2000
+Mastery Seeker,2500
+Goalbreaker,3000
+Triumphant,5000

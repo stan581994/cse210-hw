@@ -2,10 +2,17 @@
 public class GoalManager
 {
     private List<Goal> _goals = new List<Goal>();
+
+    private List<Rank> _ranks = new List<Rank>();
     private int _score;
+
+    
+    private string _rank;
 
     public GoalManager()
     {
+        _rank = " none";
+        IniatilizeRank();
 
     }
 
@@ -61,7 +68,37 @@ public class GoalManager
 
     public void DisplayPlayerInfo()
     {
+        if (_score > 0){
+            _rank = UpdatePlayerRankBasedOnPoints();
+        }
         Console.WriteLine($"You have {_score} points.");
+        Console.WriteLine($"Rank: {_rank}");
+    }
+
+    private string UpdatePlayerRankBasedOnPoints()
+    {
+        string newRank = "none";
+        foreach(Rank rank in _ranks){
+            if(int.Parse(rank.GetPointNeeded()) <= _score){
+                newRank = rank.GetRank();
+            }
+        }
+
+        return newRank;
+    }
+
+    private void IniatilizeRank(){
+        string filenamePrompt = $"..\\..\\..\\ranking\\rank.txt";
+        string filePathPrompts = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filenamePrompt);
+        string[] linesPrompt = System.IO.File.ReadAllLines(filePathPrompts);
+        foreach (String prompt in linesPrompt)
+        {
+            string[] lines  = prompt.Split(",");
+            Rank rank = new Rank(lines[0],lines[1]);
+            _ranks.Add(rank);
+            
+        }
+
     }
 
     public void ListGoalNames()

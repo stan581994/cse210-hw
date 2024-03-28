@@ -1,0 +1,3 @@
+5000
+EternalGoal:try,testing lang,100
+EternalGoal:test2,test2,500
