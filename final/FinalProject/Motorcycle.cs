@@ -16,4 +16,9 @@ public class Motorcycle : Vehicle
         return $"MOTORCYCLE - {GetBrand()}; {GetModel()}; Mileage = {_mileage}; Price = ${GetRentPrice()}";
     }
 
+        public double GetMileage(){
+        return _mileage;
+    }
+
+
 }
