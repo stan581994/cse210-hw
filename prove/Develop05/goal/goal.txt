@@ -1,3 +1,4 @@
-5000
-EternalGoal:try,testing lang,100
-EternalGoal:test2,test2,500
+0
+SimpleGoal:qweqweqwe,qweqweqweqwe,50,False
+EternalGoal:qweqweqeqw,qweqweqwe,50
+ChecklistGoal:adasasd,sasasdasdas,10,10,100,0

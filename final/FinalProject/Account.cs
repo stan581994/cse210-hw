@@ -1,8 +1,14 @@
-public class Account {
+public abstract class Account {
     private string _name;
     private string _address;
     private double _balance;
     private List<Vehicle> _vehiclesRented;
+
+    public Account(string name, string address, double balance){
+        _name = name;      
+        _address = address;
+        _balance = balance;
+    }
 
     public string GetName(){
         return _name;
@@ -35,4 +41,6 @@ public class Account {
     public void SetVehiclesRented(List<Vehicle> vehiclesList){
         _vehiclesRented = vehiclesList;
     }
+
+    public abstract string displayAccount();
 }

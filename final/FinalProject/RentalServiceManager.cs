@@ -34,6 +34,7 @@ public class RentalServiceManager
                     VehicleDashboard();
                     break;
                 case 2:
+                    AccountDashboard();
                     break;
                 case 3:
                     break;
@@ -44,6 +45,7 @@ public class RentalServiceManager
         } while (choice != 4);
 
     }
+
 
 
     public void VehicleDashboard()
@@ -69,7 +71,7 @@ public class RentalServiceManager
             switch (choice)
             {
                 case 1:
-                    DisplayAllVehicles(false);
+                    DisplayAllInfo(false, "VEHICLES");
                     break;
                 case 2:
                     AddVehicles();
@@ -90,26 +92,95 @@ public class RentalServiceManager
 
     }
 
-    public void DisplayAllVehicles(Boolean skip)
+    public void AccountDashboard()
     {
-        List<Vehicle> vehicles = fileManager.getVehiclesList();
-        int count = 1;
-        Console.Clear();
-        Console.WriteLine("=======================    Vehicle Dashboard     =========================");
-        Console.WriteLine("=======================   List of All Vehicles   =========================");
-        Console.WriteLine("");
-        foreach (Vehicle vehicle in vehicles)
+        int choice = 0;
+        do
         {
-            Console.WriteLine($"{count++}. {vehicle.DisplayVehicle()} ");
-            vehicle.DisplayVehicle();
+            Console.Clear();
+            Console.WriteLine("======================== Rental Vehicle System ===========================");
+            Console.WriteLine("=======================    Account Dashboard     =========================");
+            Console.WriteLine("");
+            Console.WriteLine("1. View All Accounts");
+            Console.WriteLine("2. Add Account");
+            Console.WriteLine("3. Remove Account");
+            Console.WriteLine("4. Go back to Main menu");
+            Console.WriteLine("");
+            Console.WriteLine("======================== Rental Vehicle System ===========================");
+            Console.WriteLine("");
+
+            Console.Write("What do you want to do? ");
+            choice = int.Parse(Console.ReadLine());
+
+            switch (choice)
+            {
+                case 1:
+                    DisplayAllInfo(false, "ACCOUNT");
+                    break;
+                case 2:
+                    AddAccount();
+                    break;
+                case 3:
+                    RemoveAccount();
+                    break;
+                case 4:
+                    Console.WriteLine("");
+
+                    Console.WriteLine("Goodbye and Have a Good Day!!");
+
+                    break;
+            }
+
+        } while (choice != 4);
+
+
+    }
+
+    public void DisplayAllInfo(Boolean skip, string category)
+    {
+
+        Console.Clear();
+        Console.WriteLine($"=======================    {category} Dashboard     =========================");
+        Console.WriteLine($"=======================   List of All {category}   =========================");
+        Console.WriteLine("");
+
+        if (category == "VEHICLES")
+        {
+            List<Vehicle> vehicles = fileManager.getVehiclesList();
+            int count = 1;
+            foreach (Vehicle vehicle in vehicles)
+            {
+                Console.WriteLine($"{count++}. {vehicle.DisplayVehicle()} ");
+            }
         }
-        Console.WriteLine("");
-        Console.WriteLine("======================== Rental Vehicle System ===========================");
-        Console.WriteLine("");
+        else
+        {
+            List<Account> accounts = fileManager.getAccountList();
+            int count = 1;
+            foreach (Account account in accounts)
+            {
+                Console.WriteLine($"{count++}. {account.displayAccount()}");
+
+            }
+
+        }
+
+
         if (!skip)
         {
-            Console.Write("press enter to go back to main Vehicle Dashboard....");
+            Console.WriteLine("");
+            Console.WriteLine("======================== Rental Vehicle System ===========================");
+            Console.WriteLine("");
+            Console.Write($"press enter to go back to main Vehicle {category}....");
             Console.ReadLine();
+
+        }
+        else
+        {
+            Console.WriteLine("0. Go back to Customer Dashboard....");
+            Console.WriteLine("");
+            Console.WriteLine("======================== Rental Vehicle System ===========================");
+            Console.WriteLine("");
 
         }
 
@@ -191,19 +262,103 @@ public class RentalServiceManager
 
     }
 
+    public void AddAccount()
+    {
+
+        int choice = 0;
+        do
+        {
+            Console.Clear();
+            Console.WriteLine("=======================    Customer Dashboard     =========================");
+            Console.WriteLine("=======================   Add new Account       =========================");
+            Console.WriteLine("");
+            Console.WriteLine("What type of Account do you want to add?");
+            Console.WriteLine("1. Normal");
+            Console.WriteLine("2. PWD");
+            Console.WriteLine("3. Senior");
+            Console.WriteLine("4. Go back to Account Dashboard...");
+            Console.WriteLine("");
+            Console.Write("What is your choice? ");
+
+            choice = int.Parse(Console.ReadLine());
+
+            if (choice != 4)
+            {
+                Console.WriteLine("");
+                Console.WriteLine("Added a new Account in the record:");
+                Console.Write("What is the name of the Account? ");
+                string name = Console.ReadLine();
+                Console.Write("What is the address?  ");
+                string address = Console.ReadLine();
+
+                Account account;
+
+                switch (choice)
+                {
+                    case 1:
+                        account = new NormalAccount(name, address, 0);
+                        break;
+                    case 2:
+                        account = new PWDAccount(name, address, 0, 0.15);
+                        break;
+                    default:
+                        account = new SeniorAccount(name, address, 0, 0.20);
+                        break;
+                }
+
+
+                fileManager.saveAccount(account);
+            }
+
+
+
+        } while (choice != 4);
+
+
+        Console.WriteLine("======================== Rental Vehicle System ===========================");
+        Console.WriteLine("");
+
+
+    }
+
     public void RemoveVehicles()
     {
 
         Console.Clear();
         Console.WriteLine("=======================    Vehicle Dashboard     =========================");
-        Console.WriteLine("=======================   Remove new Vehicles    =========================");
+        Console.WriteLine("=======================     Remove Vehicles      =========================");
 
-        DisplayAllVehicles(true);
+        DisplayAllInfo(true, "VEHICLES");
+        Console.WriteLine("0. Go back to Customer Dashboard....");
 
         int index = 0;
         Console.Write("Which Vehicles do you want to remove? [number only] ");
         index = int.Parse(Console.ReadLine());
-        fileManager.removeVehicle(index);
+        if (index != 0)
+        {
+            fileManager.removeVehicle(index);
+        }
+
+
+    }
+
+    public void RemoveAccount()
+    {
+
+        Console.Clear();
+        Console.WriteLine("=======================    Customer Dashboard     =========================");
+        Console.WriteLine("=======================     Remove Account        =========================");
+
+        DisplayAllInfo(true, "ACOUNT");
+
+        int index;
+        Console.Write("Which Account do you want to remove? [number only] ");
+        index = int.Parse(Console.ReadLine());
+        if (index != 0)
+        {
+            fileManager.removeAccount(index);
+        }
+
 
     }
 }
