@@ -1,4 +1,4 @@
-NORMAL,steven tan, manila city,0
-PWD,eduardo tan, manila city,0,0.15
-NORMAL,sally tan, manila city,0
-NORMAL,princess tan,makati city,0
+NORMAL,steven tan, manila city,0,1
+PWD,eduardo tan, manila city,0,0.15,0
+NORMAL,sally tan, manila city,0,0
+NORMAL,princess tan,makati city,0,0

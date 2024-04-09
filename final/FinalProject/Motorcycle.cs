@@ -2,7 +2,7 @@ public class Motorcycle : Vehicle
 {
     private double _mileage;
 
-    public Motorcycle(string model, string brand, double rentPrice, double mileage) : base(brand, model, rentPrice)
+    public Motorcycle(string model, string brand, double rentPrice, double mileage,bool isAvailable) : base(brand, model, rentPrice,isAvailable)
     {
         _mileage = mileage;
     }

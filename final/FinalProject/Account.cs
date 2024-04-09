@@ -2,12 +2,13 @@ public abstract class Account {
     private string _name;
     private string _address;
     private double _balance;
-    private List<Vehicle> _vehiclesRented;
+    private int _vehiclesRented;
 
-    public Account(string name, string address, double balance){
+    public Account(string name, string address, double balance, int vehiclesRented){
         _name = name;      
         _address = address;
         _balance = balance;
+        _vehiclesRented = vehiclesRented;
     }
 
     public string GetName(){
@@ -22,7 +23,7 @@ public abstract class Account {
         return _balance;
     }
 
-    public List<Vehicle> GetVehiclesRented(){
+    public int GetVehiclesRented(){
         return _vehiclesRented;
     }
 
@@ -38,7 +39,7 @@ public abstract class Account {
         _balance=balance;
     }
 
-    public void SetVehiclesRented(List<Vehicle> vehiclesList){
+    public void SetVehiclesRented(int vehiclesList){
         _vehiclesRented = vehiclesList;
     }
 

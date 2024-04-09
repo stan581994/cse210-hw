@@ -1,5 +1,5 @@
 public class NormalAccount:Account{
-    public NormalAccount(string name,string address, double balance) : base(name,address,balance) { }
+    public NormalAccount(string name,string address, double balance, int vehiclesRented) : base(name,address,balance,vehiclesRented) { }
     
      public override string displayAccount(){
         return $"{GetName()} - {GetAddress()}; Balance = {GetBalance()}";

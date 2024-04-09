@@ -1,6 +1,6 @@
 public class Bicycle : Vehicle
 {
-    public Bicycle(string model, string brand, double rentPrice) : base(brand, model, rentPrice)
+    public Bicycle(string model, string brand, double rentPrice,bool isAvailable) : base(brand, model, rentPrice,isAvailable)
     {
     }
 

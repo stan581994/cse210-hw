@@ -4,7 +4,7 @@ public class Car : Vehicle{
     private double _mileage;
 
 
-    public Car(string model, string brand, double rentPrice, double Mileage) : base(model,brand,rentPrice) {
+    public Car(string model, string brand, double rentPrice, double Mileage,bool isAvailable) : base(model,brand,rentPrice,isAvailable) {
         this._mileage = Mileage;
     }
     public override void ComputePrice()

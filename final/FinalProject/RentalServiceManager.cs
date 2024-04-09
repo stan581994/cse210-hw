@@ -37,6 +37,7 @@ public class RentalServiceManager
                     AccountDashboard();
                     break;
                 case 3:
+                    RentVehicleDashboard();
                     break;
                 case 4:
                     break;
@@ -136,6 +137,44 @@ public class RentalServiceManager
 
     }
 
+    public void RentVehicleDashboard()
+    {
+        int choice = 0;
+        do
+        {
+            Console.Clear();
+            Console.WriteLine("======================== Rental Vehicle System ===========================");
+            Console.WriteLine("=======================    Rent Vehicle Dashboard     =========================");
+            Console.WriteLine("");
+            Console.WriteLine("1. Rent Available Vehicles");
+            Console.WriteLine("2. Return Rented Vehicles");
+            Console.WriteLine("3. Go back to Main menu");
+            Console.WriteLine("");
+            Console.WriteLine("======================== Rental Vehicle System ===========================");
+            Console.WriteLine("");
+
+            Console.Write("What do you want to do? ");
+            choice = int.Parse(Console.ReadLine());
+
+            switch (choice)
+            {
+                case 1:
+                    RentAvailableVehicle();
+                    break;
+                case 2:
+                    ReturnRentedVehicle();
+                    break;
+                case 3:
+                    break;
+
+
+            }
+
+        } while (choice != 4);
+
+
+    }
+
     public void DisplayAllInfo(Boolean skip, string category)
     {
 
@@ -153,7 +192,7 @@ public class RentalServiceManager
                 Console.WriteLine($"{count++}. {vehicle.DisplayVehicle()} ");
             }
         }
-        else
+        else if (category == "ACCOUNT")
         {
             List<Account> accounts = fileManager.getAccountList();
             int count = 1;
@@ -163,6 +202,25 @@ public class RentalServiceManager
 
             }
 
+        }
+        else
+        {
+            List<Vehicle> vehicles = fileManager.getVehiclesList();
+            List<Vehicle> availVehicles = new List<Vehicle>();
+            int count = 1;
+
+            foreach (Vehicle vehicle in vehicles)
+            {
+                if (vehicle.GetIsAvailable())
+                {
+                    availVehicles.Add(vehicle);
+                }
+            }
+
+            foreach (Vehicle vehicle in availVehicles)
+            {
+                Console.WriteLine($"{count++}. {vehicle.DisplayVehicle()} ");
+            }
         }
 
 
@@ -177,7 +235,7 @@ public class RentalServiceManager
         }
         else
         {
-            Console.WriteLine("0. Go back to Customer Dashboard....");
+            Console.WriteLine($"0. Go back to {category} Dashboard....");
             Console.WriteLine("");
             Console.WriteLine("======================== Rental Vehicle System ===========================");
             Console.WriteLine("");
@@ -218,7 +276,7 @@ public class RentalServiceManager
                     double mileage = double.Parse(Console.ReadLine());
                     Console.Write("What is the rent price of the Car? ");
                     double rentPrice = double.Parse(Console.ReadLine());
-                    Car car = new Car(model, brand, rentPrice, mileage);
+                    Car car = new Car(model, brand, rentPrice, mileage, true);
                     fileManager.saveVehicles(car);
 
                     break;
@@ -234,7 +292,7 @@ public class RentalServiceManager
                     double mMileage = double.Parse(Console.ReadLine());
                     Console.Write("What is the rent price of the Motorcycle? ");
                     double mrentPrice = double.Parse(Console.ReadLine());
-                    Motorcycle motorcycle = new Motorcycle(mModel, mbrand, mrentPrice, mMileage);
+                    Motorcycle motorcycle = new Motorcycle(mModel, mbrand, mrentPrice, mMileage, true);
                     fileManager.saveVehicles(motorcycle);
                     break;
                 case 3:
@@ -246,7 +304,7 @@ public class RentalServiceManager
                     string bmodel = Console.ReadLine();
                     Console.Write("What is the rent price of the Bicycle? ");
                     double brentPrice = double.Parse(Console.ReadLine());
-                    Bicycle bicycle = new Bicycle(bmodel, bbrand, brentPrice);
+                    Bicycle bicycle = new Bicycle(bmodel, bbrand, brentPrice, true);
                     fileManager.saveVehicles(bicycle);
                     break;
                 case 4:
@@ -296,13 +354,13 @@ public class RentalServiceManager
                 switch (choice)
                 {
                     case 1:
-                        account = new NormalAccount(name, address, 0);
+                        account = new NormalAccount(name, address, 0, 0);
                         break;
                     case 2:
-                        account = new PWDAccount(name, address, 0, 0.15);
+                        account = new PWDAccount(name, address, 0, 0.15, 0);
                         break;
                     default:
-                        account = new SeniorAccount(name, address, 0, 0.20);
+                        account = new SeniorAccount(name, address, 0, 0.20, 0);
                         break;
                 }
 
@@ -358,6 +416,78 @@ public class RentalServiceManager
         {
             fileManager.removeAccount(index);
         }
+
+
+    }
+
+    public void RentAvailableVehicle()
+    {
+        Console.Clear();
+        Console.WriteLine("=======================    Customer Dashboard     =========================");
+        Console.WriteLine("=======================     Rent Vehicles          =========================");
+
+        DisplayAllInfo(true, "RENTED_VEHICLES");
+
+        int index;
+        Console.Write("Which Vehicles do you want to rent? [number only] ");
+        index = int.Parse(Console.ReadLine());
+
+        if (index != 0)
+        {
+            List<Account> accounts = fileManager.getAccountList();
+
+            int num = 0;
+            foreach (Account account in accounts)
+            {
+                if (account.GetVehiclesRented() == 0)
+                {
+                    num++;
+                    Console.WriteLine($"{num}. {account.GetName()}");
+
+                }
+
+            }
+
+            Console.Write("Who will be renting this vehicle? [number only] ");
+            Vehicle vehicleChose = fileManager.GetSpecificVehicle(index);
+            int ChoiceAccount = int.Parse(Console.ReadLine());
+            fileManager.UpdateSpecificVehicle(index);
+            fileManager.UpdateSpecificAccount(ChoiceAccount, vehicleChose.GetRentPrice());
+            fileManager.UpdateRentedVehicle();
+
+        }
+
+    }
+
+    public void ReturnRentedVehicle()
+    {
+        Console.Clear();
+        Console.WriteLine("=======================    Return Vehicles Dashboard     =========================");
+        Console.WriteLine("=======================     Return Vehicles          =========================");
+        List<Account> accounts = fileManager.getAccountList();
+        List<Account> accountsWithRent = new List<Account>();
+        foreach (Account account in accounts)
+        {
+            if (account.GetVehiclesRented() != 0)
+            {
+                accountsWithRent.Add(account);
+            }
+        }
+
+        int count = 0;
+        foreach (Account account in accountsWithRent)
+        {
+            count++;
+            Console.WriteLine($"{count}.  {account.GetName()}");
+        }
+
+        Console.WriteLine("");
+        Console.WriteLine("Which Account who will return the vehicle? ");
+        int choice = int.Parse(Console.ReadLine());
+        Console.WriteLine("");
+        int newChoice = choice -1;
+        Account returnAccount = accountsWithRent[choice];
+        Console.WriteLine("This account")
 
 
     }

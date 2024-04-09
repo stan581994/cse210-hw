@@ -14,6 +14,31 @@ public class FileManager
     public List<Account> getAccountList() { return accountLists; }
     public void addVehicle(Vehicle vehicle) { vehiclesLists.Add(vehicle); }
 
+    public void UpdateSpecificVehicle(int index)
+    {
+        int newIndex = index - 1;
+        vehiclesLists[newIndex].SetIsAvailable(false);
+    }
+
+    public void UpdateSpecificAccount(int index, double balance)
+    {
+        int newIndex = index - 1;
+        accountLists[newIndex].SetVehiclesRented(newIndex);
+        accountLists[newIndex].SetBalance(balance);
+    }
+
+    public Account GetSpecificAccount(int index)
+    {
+        int newIndex = index - 1;
+        return accountLists[newIndex];
+    }
+
+    public Vehicle GetSpecificVehicle(int index)
+    {
+        int newIndex = index - 1;
+        return vehiclesLists[newIndex];
+    }
+
 
     public void InitializeVehiclesData()
     {
@@ -26,15 +51,15 @@ public class FileManager
             switch (line[0])
             {
                 case "CAR":
-                    Vehicle carVehicle = new Car(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]));
+                    Vehicle carVehicle = new Car(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]), bool.Parse(line[5]));
                     vehiclesLists.Add(carVehicle);
                     break;
                 case "MOTORCYCLE":
-                    Vehicle motorVehicle = new Motorcycle(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]));
+                    Vehicle motorVehicle = new Motorcycle(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]), bool.Parse(line[5]));
                     vehiclesLists.Add(motorVehicle);
                     break;
                 case "BICYCLE":
-                    Vehicle bicycleVehicle = new Bicycle(line[1], line[2], double.Parse(line[3]));
+                    Vehicle bicycleVehicle = new Bicycle(line[1], line[2], double.Parse(line[3]), bool.Parse(line[4]));
                     vehiclesLists.Add(bicycleVehicle);
                     break;
 
@@ -55,15 +80,15 @@ public class FileManager
             switch (line[0])
             {
                 case "NORMAL":
-                    Account normalAcc = new NormalAccount(line[1], line[2], double.Parse(line[3]));
+                    Account normalAcc = new NormalAccount(line[1], line[2], double.Parse(line[3]), int.Parse(line[4]));
                     accountLists.Add(normalAcc);
                     break;
                 case "PWD":
-                    PWDAccount pwdAcc = new PWDAccount(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]));
+                    PWDAccount pwdAcc = new PWDAccount(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]), int.Parse(line[5]));
                     accountLists.Add(pwdAcc);
                     break;
                 case "SENIOR":
-                    SeniorAccount senAcc = new SeniorAccount(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]));
+                    SeniorAccount senAcc = new SeniorAccount(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]), int.Parse(line[5]));
                     accountLists.Add(senAcc);
                     break;
 
@@ -85,16 +110,16 @@ public class FileManager
             {
                 if (vehicle is Car)
                 {
-                    outputFile.WriteLine($"CAR,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Car)vehicle).GetMileage()}");
+                    outputFile.WriteLine($"CAR,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Car)vehicle).GetMileage()},{vehicle.GetIsAvailable()}");
                 }
                 else if (vehicle is Motorcycle)
                 {
-                    outputFile.WriteLine($"MOTORCYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Motorcycle)vehicle).GetMileage()}");
+                    outputFile.WriteLine($"MOTORCYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Motorcycle)vehicle).GetMileage()},{vehicle.GetIsAvailable()}");
 
                 }
                 else
                 {
-                    outputFile.WriteLine($"BICYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()}");
+                    outputFile.WriteLine($"BICYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{vehicle.GetIsAvailable()}");
 
                 }
 
@@ -155,20 +180,21 @@ public class FileManager
         string filePathPrompts = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filenamePrompt);
         using (StreamWriter outputFile = new StreamWriter(filePathPrompts))
         {
-            foreach (Account account in accountLists)
+
+            foreach (Vehicle vehicle in vehiclesLists)
             {
-                if (account is NormalAccount)
+                if (vehicle is Car)
                 {
-                    outputFile.WriteLine($"NORMAL,{account.GetName()},{account.GetAddress()},{account.GetBalance()}");
+                    outputFile.WriteLine($"CAR,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Car)vehicle).GetMileage()},{vehicle.GetIsAvailable()}");
                 }
-                else if (account is PWDAccount)
+                else if (vehicle is Motorcycle)
                 {
-                    outputFile.WriteLine($"PWD,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{((PWDAccount)account).GetDiscountRate()}");
+                    outputFile.WriteLine($"MOTORCYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Motorcycle)vehicle).GetMileage()},{vehicle.GetIsAvailable()}");
 
                 }
                 else
                 {
-                    outputFile.WriteLine($"NORMAL,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{((SeniorAccount)account).GetDiscountRate()}");
+                    outputFile.WriteLine($"BICYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{vehicle.GetIsAvailable()}");
 
                 }
 
@@ -222,6 +248,68 @@ public class FileManager
         Console.WriteLine("press ENTER to continue....");
         Console.ReadLine();
 
+    }
+
+    public void UpdateRentedVehicle()
+    {
+
+        string filenamePrompt = $"..\\..\\..\\data\\account.txt";
+        string filePathPrompts = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filenamePrompt);
+        using (StreamWriter outputFile = new StreamWriter(filePathPrompts))
+        {
+
+            foreach (Account account in accountLists)
+            {
+                if (account is NormalAccount)
+                {
+                    outputFile.WriteLine($"NORMAL,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{account.GetVehiclesRented()}");
+                }
+                else if (account is PWDAccount)
+                {
+                    outputFile.WriteLine($"PWD,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{((PWDAccount)account).GetDiscountRate()},{account.GetVehiclesRented()}");
+
+                }
+                else
+                {
+                    outputFile.WriteLine($"NORMAL,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{((SeniorAccount)account).GetDiscountRate()},{account.GetVehiclesRented()}");
+
+                }
+
+            }
+
+        }
+
+
+        string filenamePromptVehicle = $"..\\..\\..\\data\\vehicles.txt";
+        string filePathPromptsVehicle = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filenamePromptVehicle);
+        using (StreamWriter outputFile = new StreamWriter(filePathPromptsVehicle))
+        {
+            foreach (Vehicle vehicle in vehiclesLists)
+            {
+                if (vehicle is Car)
+                {
+                    outputFile.WriteLine($"CAR,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Car)vehicle).GetMileage()},{vehicle.GetIsAvailable()}");
+                }
+                else if (vehicle is Motorcycle)
+                {
+                    outputFile.WriteLine($"MOTORCYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Motorcycle)vehicle).GetMileage()},{vehicle.GetIsAvailable()}");
+
+                }
+                else
+                {
+                    outputFile.WriteLine($"BICYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{vehicle.GetIsAvailable()}");
+
+                }
+
+            }
+
+
+
+        }
+
+        Console.WriteLine("Rented Vehicle Saved Complete!");
+        Console.WriteLine("press ENTER to continue...");
+        Console.ReadLine();
     }
 
 

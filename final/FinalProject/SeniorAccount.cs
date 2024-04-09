@@ -2,7 +2,7 @@ public class SeniorAccount : Account
 {
   private double _discountRate;
 
-  public SeniorAccount(string name, string address, double balance, double discountRate) : base(name, address, balance)
+  public SeniorAccount(string name, string address, double balance, double discountRate,int vehiclesRented) : base(name, address, balance,vehiclesRented)
   {
     _discountRate = discountRate;
   }
