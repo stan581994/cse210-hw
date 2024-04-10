@@ -11,7 +11,47 @@ public class FileManager
     }
 
     public List<Vehicle> getVehiclesList() { return vehiclesLists; }
+
+    public List<Vehicle> getAvailableVehiclesList()
+    {
+        List<Vehicle> availableVehicleLists = new List<Vehicle>();
+        foreach (Vehicle vehicle in vehiclesLists)
+        {
+            if (vehicle.GetIsAvailable())
+            {
+                availableVehicleLists.Add(vehicle);
+            }
+        }
+
+        return availableVehicleLists;
+    }
     public List<Account> getAccountList() { return accountLists; }
+    public List<Account> getAvailableAccountList()
+    {
+        List<Account> availableAccountLists = new List<Account>();
+        foreach (Account account in accountLists)
+        {
+          
+            if (account.GetVehiclesRented() == "none")
+            {
+                availableAccountLists.Add(account);
+            }
+        }
+        return availableAccountLists;
+    }
+
+    public List<Account> getAccountWithRentList()
+    {
+        List<Account> availableAccountLists = new List<Account>();
+        foreach (Account account in accountLists)
+        {
+            if (account.GetVehiclesRented() != "none")
+            {
+                availableAccountLists.Add(account);
+            }
+        }
+        return availableAccountLists;
+    }
     public void addVehicle(Vehicle vehicle) { vehiclesLists.Add(vehicle); }
 
     public void UpdateSpecificVehicle(int index)
@@ -19,12 +59,43 @@ public class FileManager
         int newIndex = index - 1;
         vehiclesLists[newIndex].SetIsAvailable(false);
     }
-
-    public void UpdateSpecificAccount(int index, double balance)
+    public void UpdateSpecificRentedVehicle(string uuid)
     {
-        int newIndex = index - 1;
-        accountLists[newIndex].SetVehiclesRented(newIndex);
-        accountLists[newIndex].SetBalance(balance);
+        foreach (Vehicle vehicle in vehiclesLists)
+        {
+            if (vehicle.Getuuid() == uuid)
+            {
+                vehicle.SetIsAvailable(true);
+            }
+        }
+
+    }
+
+    public void UpdateSpecificAccount(string accountName, string uuid, double balance)
+    {
+        foreach (Account account in accountLists)
+        {
+            if (account.GetName() == accountName)
+            {
+                account.SetBalance(balance);
+                account.SetVehiclesRented(uuid);
+            }
+        }
+    }
+
+    public void UpdateSpecificRentedAccount(string name, double balance)
+    {
+        int counter = 1;
+        foreach (Account account in accountLists)
+        {
+            if (account.GetName() == name)
+            {
+                account.SetVehiclesRented("none");
+
+            }
+            counter++;
+        }
+
     }
 
     public Account GetSpecificAccount(int index)
@@ -33,10 +104,16 @@ public class FileManager
         return accountLists[newIndex];
     }
 
-    public Vehicle GetSpecificVehicle(int index)
+    public Vehicle GetSpecificVehicle(string uuid)
     {
-        int newIndex = index - 1;
-        return vehiclesLists[newIndex];
+        foreach (Vehicle vehicles in vehiclesLists)
+        {
+            if (vehicles.Getuuid() == uuid)
+            {
+                return vehicles;
+            }
+        }
+        return null;
     }
 
 
@@ -51,15 +128,15 @@ public class FileManager
             switch (line[0])
             {
                 case "CAR":
-                    Vehicle carVehicle = new Car(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]), bool.Parse(line[5]));
+                    Vehicle carVehicle = new Car(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]), bool.Parse(line[5]), line[6]);
                     vehiclesLists.Add(carVehicle);
                     break;
                 case "MOTORCYCLE":
-                    Vehicle motorVehicle = new Motorcycle(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]), bool.Parse(line[5]));
+                    Vehicle motorVehicle = new Motorcycle(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]), bool.Parse(line[5]), line[6]);
                     vehiclesLists.Add(motorVehicle);
                     break;
                 case "BICYCLE":
-                    Vehicle bicycleVehicle = new Bicycle(line[1], line[2], double.Parse(line[3]), bool.Parse(line[4]));
+                    Vehicle bicycleVehicle = new Bicycle(line[1], line[2], double.Parse(line[3]), bool.Parse(line[4]), line[5]);
                     vehiclesLists.Add(bicycleVehicle);
                     break;
 
@@ -80,15 +157,15 @@ public class FileManager
             switch (line[0])
             {
                 case "NORMAL":
-                    Account normalAcc = new NormalAccount(line[1], line[2], double.Parse(line[3]), int.Parse(line[4]));
+                    Account normalAcc = new NormalAccount(line[1], line[2], double.Parse(line[3]), line[4]);
                     accountLists.Add(normalAcc);
                     break;
                 case "PWD":
-                    PWDAccount pwdAcc = new PWDAccount(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]), int.Parse(line[5]));
+                    PWDAccount pwdAcc = new PWDAccount(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]), line[5]);
                     accountLists.Add(pwdAcc);
                     break;
                 case "SENIOR":
-                    SeniorAccount senAcc = new SeniorAccount(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]), int.Parse(line[5]));
+                    SeniorAccount senAcc = new SeniorAccount(line[1], line[2], double.Parse(line[3]), double.Parse(line[4]), line[5]);
                     accountLists.Add(senAcc);
                     break;
 
@@ -110,16 +187,16 @@ public class FileManager
             {
                 if (vehicle is Car)
                 {
-                    outputFile.WriteLine($"CAR,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Car)vehicle).GetMileage()},{vehicle.GetIsAvailable()}");
+                    outputFile.WriteLine($"CAR,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Car)vehicle).GetMileage()},{vehicle.GetIsAvailable()},{vehicle.Getuuid()}");
                 }
                 else if (vehicle is Motorcycle)
                 {
-                    outputFile.WriteLine($"MOTORCYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Motorcycle)vehicle).GetMileage()},{vehicle.GetIsAvailable()}");
+                    outputFile.WriteLine($"MOTORCYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Motorcycle)vehicle).GetMileage()},{vehicle.GetIsAvailable()},{vehicle.Getuuid()}");
 
                 }
                 else
                 {
-                    outputFile.WriteLine($"BICYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{vehicle.GetIsAvailable()}");
+                    outputFile.WriteLine($"BICYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{vehicle.GetIsAvailable()},{vehicle.Getuuid()}");
 
                 }
 
@@ -147,16 +224,16 @@ public class FileManager
             {
                 if (account is NormalAccount)
                 {
-                    outputFile.WriteLine($"NORMAL,{account.GetName()},{account.GetAddress()},{account.GetBalance()}");
+                    outputFile.WriteLine($"NORMAL,{account.GetName()},{account.GetAddress()},{account.GetBalance()},none");
                 }
                 else if (account is PWDAccount)
                 {
-                    outputFile.WriteLine($"PWD,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{((PWDAccount)account).GetDiscountRate()}");
+                    outputFile.WriteLine($"PWD,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{((PWDAccount)account).GetDiscountRate()},none");
 
                 }
                 else
                 {
-                    outputFile.WriteLine($"NORMAL,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{((SeniorAccount)account).GetDiscountRate()}");
+                    outputFile.WriteLine($"SENIOR,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{((SeniorAccount)account).GetDiscountRate()},none");
 
                 }
 
@@ -175,8 +252,8 @@ public class FileManager
     public void removeVehicle(int index)
     {
         int newIndex = index - 1;
-        accountLists.RemoveAt(newIndex);
-        string filenamePrompt = $"..\\..\\..\\data\\account.txt";
+        vehiclesLists.RemoveAt(newIndex);
+        string filenamePrompt = $"..\\..\\..\\data\\vehicles.txt";
         string filePathPrompts = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filenamePrompt);
         using (StreamWriter outputFile = new StreamWriter(filePathPrompts))
         {
@@ -185,16 +262,16 @@ public class FileManager
             {
                 if (vehicle is Car)
                 {
-                    outputFile.WriteLine($"CAR,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Car)vehicle).GetMileage()},{vehicle.GetIsAvailable()}");
+                    outputFile.WriteLine($"CAR,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Car)vehicle).GetMileage()},{vehicle.GetIsAvailable()},{vehicle.Getuuid()}");
                 }
                 else if (vehicle is Motorcycle)
                 {
-                    outputFile.WriteLine($"MOTORCYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Motorcycle)vehicle).GetMileage()},{vehicle.GetIsAvailable()}");
+                    outputFile.WriteLine($"MOTORCYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Motorcycle)vehicle).GetMileage()},{vehicle.GetIsAvailable()},{vehicle.Getuuid()}");
 
                 }
                 else
                 {
-                    outputFile.WriteLine($"BICYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{vehicle.GetIsAvailable()}");
+                    outputFile.WriteLine($"BICYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{vehicle.GetIsAvailable()},{vehicle.Getuuid()}");
 
                 }
 
@@ -223,16 +300,16 @@ public class FileManager
             {
                 if (account is NormalAccount)
                 {
-                    outputFile.WriteLine($"NORMAL,{account.GetName()},{account.GetAddress()},{account.GetBalance()}");
+                    outputFile.WriteLine($"NORMAL,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{account.GetVehiclesRented()}");
                 }
                 else if (account is PWDAccount)
                 {
-                    outputFile.WriteLine($"PWD,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{((PWDAccount)account).GetDiscountRate()}");
+                    outputFile.WriteLine($"PWD,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{((PWDAccount)account).GetDiscountRate()},{account.GetVehiclesRented()}");
 
                 }
                 else
                 {
-                    outputFile.WriteLine($"NORMAL,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{((SeniorAccount)account).GetDiscountRate()}");
+                    outputFile.WriteLine($"SENIOR,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{((SeniorAccount)account).GetDiscountRate()},{account.GetVehiclesRented()}");
 
                 }
 
@@ -271,7 +348,7 @@ public class FileManager
                 }
                 else
                 {
-                    outputFile.WriteLine($"NORMAL,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{((SeniorAccount)account).GetDiscountRate()},{account.GetVehiclesRented()}");
+                    outputFile.WriteLine($"SENIOR,{account.GetName()},{account.GetAddress()},{account.GetBalance()},{((SeniorAccount)account).GetDiscountRate()},{account.GetVehiclesRented()}");
 
                 }
 
@@ -288,16 +365,16 @@ public class FileManager
             {
                 if (vehicle is Car)
                 {
-                    outputFile.WriteLine($"CAR,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Car)vehicle).GetMileage()},{vehicle.GetIsAvailable()}");
+                    outputFile.WriteLine($"CAR,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Car)vehicle).GetMileage()},{vehicle.GetIsAvailable()},{vehicle.Getuuid()}");
                 }
                 else if (vehicle is Motorcycle)
                 {
-                    outputFile.WriteLine($"MOTORCYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Motorcycle)vehicle).GetMileage()},{vehicle.GetIsAvailable()}");
+                    outputFile.WriteLine($"MOTORCYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{((Motorcycle)vehicle).GetMileage()},{vehicle.GetIsAvailable()},{vehicle.Getuuid()}");
 
                 }
                 else
                 {
-                    outputFile.WriteLine($"BICYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{vehicle.GetIsAvailable()}");
+                    outputFile.WriteLine($"BICYCLE,{vehicle.GetBrand()},{vehicle.GetModel()},{vehicle.GetRentPrice()},{vehicle.GetIsAvailable()},{vehicle.Getuuid()}");
 
                 }
 

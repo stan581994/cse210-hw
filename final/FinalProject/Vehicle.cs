@@ -5,12 +5,23 @@ public abstract class Vehicle
     private double _rentPrice;
     private bool _isAvailable;
 
-    public Vehicle(string brand, string model, double rentPrice, bool isAvailable)
+    private string _uuid;
+
+    public Vehicle(string brand, string model, double rentPrice, bool isAvailable, string uuid)
     {
         _brand = brand;
         _model = model;
         _rentPrice = rentPrice;
         _isAvailable = isAvailable;
+        _uuid = uuid;
+    }
+
+    public string Getuuid(){
+        return _uuid;
+    }
+
+    public void Setuuid(string uuid){
+        _uuid = uuid;
     }
 
     public string GetBrand()
@@ -36,7 +47,9 @@ public abstract class Vehicle
         _isAvailable = isAvailable;
     }
 
-    public abstract void ComputePrice();
+     public  double ComputePrice(){
+        return _rentPrice;
+     }
 
     public virtual string DisplayVehicle()
     {

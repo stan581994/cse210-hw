@@ -1,16 +1,20 @@
-using System.Runtime.CompilerServices;
 
 public class Car : Vehicle{
     private double _mileage;
 
 
-    public Car(string model, string brand, double rentPrice, double Mileage,bool isAvailable) : base(model,brand,rentPrice,isAvailable) {
+    public Car(string model, string brand, double rentPrice, double Mileage,bool isAvailable,string uuid) : base(model,brand,rentPrice,isAvailable,uuid) {
         this._mileage = Mileage;
     }
-    public override void ComputePrice()
+    public double GetTotalPrice(double mileage, double discountRate)
     {
-        throw new NotImplementedException();
+        double mileageConsumed = mileage - _mileage;
+        double additionalFee = mileageConsumed * 0.084;
+        double totalRpice = GetRentPrice() + additionalFee;
+        double discountedPrice = totalRpice - (totalRpice * discountRate);
+        return discountedPrice;
     }
+
 
     public double GetMileage(){
         return _mileage;

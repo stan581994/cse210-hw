@@ -2,9 +2,9 @@ public abstract class Account {
     private string _name;
     private string _address;
     private double _balance;
-    private int _vehiclesRented;
+    private string _vehiclesRented;
 
-    public Account(string name, string address, double balance, int vehiclesRented){
+    public Account(string name, string address, double balance, string vehiclesRented){
         _name = name;      
         _address = address;
         _balance = balance;
@@ -23,7 +23,7 @@ public abstract class Account {
         return _balance;
     }
 
-    public int GetVehiclesRented(){
+    public string GetVehiclesRented(){
         return _vehiclesRented;
     }
 
@@ -39,7 +39,7 @@ public abstract class Account {
         _balance=balance;
     }
 
-    public void SetVehiclesRented(int vehiclesList){
+    public void SetVehiclesRented(string vehiclesList){
         _vehiclesRented = vehiclesList;
     }
 

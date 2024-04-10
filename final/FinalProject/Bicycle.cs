@@ -1,13 +1,9 @@
 public class Bicycle : Vehicle
 {
-    public Bicycle(string model, string brand, double rentPrice,bool isAvailable) : base(brand, model, rentPrice,isAvailable)
+    public Bicycle(string model, string brand, double rentPrice,bool isAvailable,string uuid) : base(brand, model, rentPrice,isAvailable,uuid)
     {
     }
 
-    public override void ComputePrice()
-    {
-        throw new NotImplementedException();
-    }
 
     public override string DisplayVehicle()
     {

@@ -1,4 +1,3 @@
-NORMAL,steven tan, manila city,0,1
-PWD,eduardo tan, manila city,0,0.15,0
-NORMAL,sally tan, manila city,0,0
-NORMAL,princess tan,makati city,0,0
+NORMAL,steven tan, manila city,55,none
+PWD,eduardo tan, manila city,55,0.15,none
+SENIOR,kingston Brad ,Silicon city,55,0.2,none

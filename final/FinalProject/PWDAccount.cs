@@ -1,7 +1,7 @@
 public class PWDAccount : Account
 {
    private double _discountRate;
-   public PWDAccount(string name, string address, double balance, double discountRate, int vehiclesRented) : base(name, address, balance,vehiclesRented)
+   public PWDAccount(string name, string address, double balance, double discountRate, string vehiclesRented) : base(name, address, balance,vehiclesRented)
    {
       _discountRate = discountRate;
    }
